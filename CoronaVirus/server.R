@@ -9,7 +9,6 @@
 
 library(shiny)
 library(readr)
-library(plotly)
 library(tidyr)
 library(dplyr)
 library(leaflet)

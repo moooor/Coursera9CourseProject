@@ -1,0 +1,81 @@
+---
+title: "Reproducible Pitch Presentation"
+author: "Nick Orka"
+date: "3/12/2020"
+output: slidy_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(readr)
+library(tidyr)
+library(dplyr)
+library(leaflet)
+```
+
+## Overview {.center}
+
+```{r preload, echo=F, message=F, warning=F}
+
+confUrl <- "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"
+dailyUrl <- "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-11-2020.csv"
+    
+confDF <- read_csv(confUrl)
+df <- read_csv(dailyUrl)
+df <- df %>%
+    mutate(location = sub(", NA", "", paste(`Country/Region`, `Province/State`, sep = ", "))) %>%
+    mutate(confPopup = paste0(location, "<br>Confirmed = ", Confirmed,
+                              "<br>Deaths = ", Deaths,
+                              "<br>Recovered = ", Recovered))
+        
+m <- df %>%
+    leaflet() %>%
+    addTiles() %>%
+    addCircleMarkers(lat = ~Latitude, lng = ~Longitude, radius = log(df$Confirmed) + 10,
+                     clusterOptions = markerClusterOptions(), popup = df$confPopup)
+```
+
+<center>
+The whole idea was to present corona virus (COVID-19) statistical data in interactive way where End User will be able to navigate to any location accros historical dates. The data source for the application was taken from John Hopkins CSSE research <a href="https://github.com/CSSEGISandData/COVID-19">https://github.com/CSSEGISandData/COVID-19</a>
+
+```{r, echo=F, fig.width=10}
+m
+```
+</center>
+
+
+## Data source (Confirmed) {.center}
+
+
+Confirmed cases:
+```{r, echo=F, warning=F, message=F}
+library(rmarkdown)
+paged_table(confDF)
+```
+
+
+## Data source (Daily) {.center}
+
+For March 11, 2020
+
+```{r cars, echo = F}
+paged_table(df)
+```
+
+## Workflow
+
+- By default the itaractive map will render whole world data for the latest available date data
+- As soon as map created End User can do next steps:
+    - Navigate to the region of interest on a map with a mouse
+    - Pick data for particular date
+    - Pick a country of interest
+    
+Here is the map one more time for 3/11/2020.
+```{r, echo=F}
+m
+```
+
+
+
+
+
