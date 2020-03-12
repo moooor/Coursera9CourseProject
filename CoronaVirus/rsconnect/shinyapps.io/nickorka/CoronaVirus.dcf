@@ -1,0 +1,12 @@
+name: CoronaVirus
+title: CoronaVirus
+username:
+account: nickorka
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1939514
+bundleId: 2874973
+url: https://nickorka.shinyapps.io/CoronaVirus/
+when: 1584020815.53295
+asMultiple: FALSE
+asStatic: FALSE
